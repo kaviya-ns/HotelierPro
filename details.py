@@ -3,6 +3,7 @@ from PIL import Image,ImageTk
 from tkinter import ttk
 import random
 import mysql.connector
+from db import get_connection
 from tkinter import messagebox 
 from time import strftime
 from datetime import datetime
@@ -103,7 +104,7 @@ class DetailsRoom:
             messagebox.showerror("Error", "All fields required",parent=self.root)
         else:
             try:
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 my_cursor.execute("insert into details values(%s,%s,%s)",(self.var_floor.get(), 
                                                                           self.var_roomNo.get(),
@@ -118,7 +119,7 @@ class DetailsRoom:
 
     #fetch data
     def fetch_data(self):
-        conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+        conn=get_connection()
         my_cursor=conn.cursor()
         my_cursor.execute("select * from details")
         rows=my_cursor.fetchall()
@@ -144,7 +145,7 @@ class DetailsRoom:
         if self.var_floor.get() == "":
             messagebox.showerror("Error", "Please enter floor number.", parent=self.root)
         else:
-            conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+            conn = get_connection()
             my_cursor = conn.cursor()
             my_cursor.execute("UPDATE details SET `Floor`=%s, `RoomNumber`=%s, `RoomType`=%s",
             (
@@ -160,7 +161,7 @@ class DetailsRoom:
     def mDelete(self):
         mDelete=messagebox.askyesno("Hotel Management System","Do you want to delete this room?",parent=self.root)
         if mDelete>0:
-            conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+            conn = get_connection()
             my_cursor = conn.cursor()
             query = "DELETE FROM details WHERE `RoomNumber` = %s"
             value=(self.var_roomNo.get(),)

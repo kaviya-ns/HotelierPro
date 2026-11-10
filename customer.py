@@ -3,6 +3,7 @@ from PIL import Image,ImageTk
 from tkinter import ttk
 import random
 import mysql.connector
+from db import get_connection
 from tkinter import messagebox 
 
 class Cust_Win:
@@ -203,7 +204,7 @@ class Cust_Win:
             messagebox.showerror("Error", "All fields required",parent=self.root)
         else:
             try:
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 my_cursor.execute("insert into customer values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(self.var_ref.get(),
                                   self.var_cust_name.get(),self.var_mother.get(),self.var_gender.get(),self.var_post.get(),
@@ -216,7 +217,7 @@ class Cust_Win:
                 messagebox.showwarning("Warning",f"Something went wrong:{str(es)}",parent=self.root)
 
     def fetch_data(self):
-        conn=mysql.connector.connect(host="localhost",user="root",password="ambagelat0",database="dbmspackage")
+        conn=get_connection()
         my_cursor=conn.cursor()
         my_cursor.execute("select * from customer")
         rows=my_cursor.fetchall()
@@ -248,7 +249,7 @@ class Cust_Win:
         if self.var_mobile.get()=="":
             messagebox.showerror("Error","Please enter mobile number.",parent=self.root)
         else:
-            conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+            conn=get_connection()
             my_cursor=conn.cursor()
             my_cursor.execute("update customer set 'Customer Name'=%s, 'Mother's Name'=%s, 'Gender'=%s,'Postal Code'=%s,' Mobile Number'=%s,' Email'=%s,' Nationality'=%s,' Id Proof Type'=%s,' Id Number'=%s,' Address'=%s where' Customer Reference'=%s",
                                   self.var_cust_name.get(),self.var_mother.get(),self.var_gender.get(),self.var_post.get(),
@@ -264,7 +265,7 @@ class Cust_Win:
         if self.var_mobile.get() == "":
             messagebox.showerror("Error", "Please enter mobile number.", parent=self.root)
         else:
-            conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+            conn = get_connection()
             my_cursor = conn.cursor()
             sql_query = """
             UPDATE customer 
@@ -285,7 +286,7 @@ class Cust_Win:
     def mDelete(self):
         mDelete=messagebox.askyesno("Hotel Management System","Do you want to delete this customer?",parent=self.root)
         if mDelete>0:
-            conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+            conn = get_connection()
             my_cursor = conn.cursor()
             #query="delete from customer where Customer Reference=%s"
             query = "DELETE FROM customer WHERE `Customer Reference` = %s"
@@ -318,7 +319,7 @@ class Cust_Win:
 
 
     def search(self):
-        conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+        conn = get_connection()
         my_cursor = conn.cursor()
     
         search_query_mobile = "SELECT * FROM customer WHERE `Mobile Number` LIKE %s"

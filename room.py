@@ -3,6 +3,7 @@ from PIL import Image,ImageTk
 from tkinter import ttk
 import random
 import mysql.connector
+from db import get_connection
 from tkinter import messagebox 
 from time import strftime
 from datetime import datetime
@@ -68,7 +69,7 @@ class RoomBooking:
         # Room Type
         label_RoomType=Label(labelframeleft, font=("impact",12), text="Room Type ", padx=2, pady=6) 
         label_RoomType.grid(row=3, column=0, sticky=W)
-        conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+        conn=get_connection()
         my_cursor=conn.cursor()
         my_cursor.execute("select `RoomType` from details")
         ide=my_cursor.fetchall()
@@ -83,7 +84,7 @@ class RoomBooking:
         #txtRoomAvailable=ttk.Entry (labelframeleft,textvariable=self.var_roomavailable, font=("arial", 13, "bold"), width=29)
         #txtRoomAvailable.grid(row=4, column=1)
 
-        conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+        conn=get_connection()
         my_cursor=conn.cursor()
         my_cursor.execute("select `RoomNumber` from details")
         rows=my_cursor.fetchall()
@@ -215,7 +216,7 @@ class RoomBooking:
             messagebox.showerror("Error", "All fields required",parent=self.root)
         else:
             try:
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 my_cursor.execute("insert into room values(%s,%s,%s,%s,%s,%s,%s)",(self.var_contact.get(),
                                                                                        self.var_checkin.get(),
@@ -234,7 +235,7 @@ class RoomBooking:
 
     #fetch data
     def fetch_data(self):
-        conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+        conn=get_connection()
         my_cursor=conn.cursor()
         my_cursor.execute("select * from room")
         rows=my_cursor.fetchall()
@@ -264,7 +265,7 @@ class RoomBooking:
         if self.var_contact.get() == "":
             messagebox.showerror("Error", "Please enter mobile number.", parent=self.root)
         else:
-            conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+            conn = get_connection()
             my_cursor = conn.cursor()
             my_cursor.execute("UPDATE room SET `check_in`=%s, `check_out`=%s, roomtype=%s, `roomavailable`=%s, `meal`=%s, `noOfDays`=%s WHERE `contact`=%s",
             (
@@ -281,7 +282,7 @@ class RoomBooking:
     def mDelete(self):
         mDelete=messagebox.askyesno("Hotel Management System","Do you want to delete this booking?",parent=self.root)
         if mDelete>0:
-            conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+            conn = get_connection()
             my_cursor = conn.cursor()
             #query="delete from customer where Customer Reference=%s"
             query = "DELETE FROM room WHERE `contact` = %s"
@@ -316,7 +317,7 @@ class RoomBooking:
         if self.var_contact.get()=="":
             messagebox.showerror("Error","Please enter Contact Number.",parent=self.root)
         else:
-            conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+            conn=get_connection()
             my_cursor=conn.cursor()
             query=("select `Customer Name` from customer where `Mobile Number`=%s ")
             value=(self.var_contact.get(),)
@@ -339,7 +340,7 @@ class RoomBooking:
                 lbl.place(x=90,y=0)
 
                #gender 
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 query=("select `Gender` from customer where `Mobile Number`=%s ")
                 value=(self.var_contact.get(),)
@@ -353,7 +354,7 @@ class RoomBooking:
                 lbl2.place(x=90,y=30)
 
                 #email
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 query=("select `Email` from customer where `Mobile Number`=%s ")
                 value=(self.var_contact.get(),)
@@ -367,7 +368,7 @@ class RoomBooking:
                 lbl3.place(x=90,y=60)
 
                 #nationality
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 query=("select `Nationality` from customer where `Mobile Number`=%s ")
                 value=(self.var_contact.get(),)
@@ -381,7 +382,7 @@ class RoomBooking:
                 lbl4.place(x=90,y=90)
 
                 #address
-                conn=mysql.connector.connect(host="localhost",username="root",password="ambagelat0",database="dbmspackage")
+                conn=get_connection()
                 my_cursor=conn.cursor()
                 query=("select `Address` from customer where `Mobile Number`=%s ")
                 value=(self.var_contact.get(),)
@@ -399,7 +400,7 @@ class RoomBooking:
 
     #search system
     def search(self):
-        conn = mysql.connector.connect(host="localhost", username="root", password="ambagelat0", database="dbmspackage")
+        conn = get_connection()
         my_cursor = conn.cursor()
     
         search_query_contact = "SELECT * FROM room WHERE `contact` LIKE %s"

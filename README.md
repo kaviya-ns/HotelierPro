@@ -25,6 +25,7 @@ HotelierPro gives front-desk staff one place to register guests, book rooms, man
 | `customer.py` | Customer CRUD |
 | `room.py` | Room booking and billing |
 | `details.py` | Room master data |
+| `db.py` | Shared MySQL connection (settings from environment variables) |
 
 ## Getting Started
 
@@ -39,7 +40,11 @@ HotelierPro gives front-desk staff one place to register guests, book rooms, man
    CREATE DATABASE dbmspackage;
    ```
    Then create the `customer`, `room` and `details` tables used by the modules.
-3. Update the MySQL connection settings (`host`, `user`, `password`, `database`) in the `mysql.connector.connect(...)` calls to match your local server.
+3. Set your MySQL connection details as environment variables (read by `db.py`):
+   ```bash
+   set HOTELIER_DB_PASSWORD=your-mysql-password     # macOS/Linux: export HOTELIER_DB_PASSWORD=...
+   ```
+   Optional: `HOTELIER_DB_HOST` (default `localhost`), `HOTELIER_DB_USER` (default `root`), `HOTELIER_DB_NAME` (default `dbmspackage`).
 4. Run:
    ```bash
    python login.py
